@@ -9,11 +9,12 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add.*
 import java.text.SimpleDateFormat
 import java.util.*
+import com.globomed.learn.GloboMedDBContract.EmployeeEntry as EmployeeEntry
 
 class AddEmployeeActivity : Activity() {
 
     private val myCalendar = Calendar.getInstance()
-    private lateinit var databaseHelper: DatabaseHelper;
+    private lateinit var databaseHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,15 +58,17 @@ class AddEmployeeActivity : Activity() {
             val name = etEmpName.text.toString()
             val designation = etDesignation.text.toString()
             val dob: Long = myCalendar.timeInMillis
+            val isSurgeon = if (sSurgeon.isChecked) 1 else 0
 
             val db = databaseHelper.writableDatabase
 
             val values = ContentValues()
-            values.put(GloboMedDBContract.EmployeeEntry.COLUMN_NAME, name)
-            values.put(GloboMedDBContract.EmployeeEntry.COLUMN_DESIGNATION, designation)
-            values.put(GloboMedDBContract.EmployeeEntry.COLUMN_DOB, dob)
+            values.put(EmployeeEntry.COLUMN_NAME, name)
+            values.put(EmployeeEntry.COLUMN_DESIGNATION, designation)
+            values.put(EmployeeEntry.COLUMN_DOB, dob)
+            values.put(EmployeeEntry.COLUMN_SURGEON, isSurgeon)
 
-            val result = db.insert(GloboMedDBContract.EmployeeEntry.TABLE_NAME, null, values)
+            db.insert(EmployeeEntry.TABLE_NAME, null, values)
 
             setResult(RESULT_OK, Intent())
 
