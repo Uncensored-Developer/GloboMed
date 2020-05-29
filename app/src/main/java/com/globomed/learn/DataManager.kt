@@ -1,5 +1,6 @@
 package com.globomed.learn
 
+import android.content.ContentValues
 import com.globomed.learn.GloboMedDBContract.EmployeeEntry
 
 object DataManager {
@@ -87,6 +88,34 @@ object DataManager {
         cursor.close()
 
         return employee
+    }
+
+    fun updateEmployee(databaseHelper: DatabaseHelper, employee: Employee) {
+        val db = databaseHelper.writableDatabase
+
+        val values = ContentValues()
+        values.put(EmployeeEntry.COLUMN_NAME, employee.name)
+        values.put(EmployeeEntry.COLUMN_DESIGNATION, employee.designation)
+        values.put(EmployeeEntry.COLUMN_DOB, employee.dob)
+
+        val selection = EmployeeEntry.COLUMN_ID + " LIKE ? "
+        val selectionArgs = arrayOf(employee.id)
+
+        db.update(EmployeeEntry.TABLE_NAME, values, selection, selectionArgs)
+    }
+
+    fun deleteEmployee(databaseHelper: DatabaseHelper, empId: String): Int {
+        val db = databaseHelper.writableDatabase
+
+        val selection = EmployeeEntry.COLUMN_ID + " LIKE ? "
+        val selectionArgs = arrayOf(empId)
+
+        return db.delete(EmployeeEntry.TABLE_NAME, selection, selectionArgs)
+    }
+
+    fun deleteAllEmployees(databaseHelper: DatabaseHelper): Int {
+        val db = databaseHelper.writableDatabase
+        return db.delete(EmployeeEntry.TABLE_NAME, "1", null)
     }
 
 }
