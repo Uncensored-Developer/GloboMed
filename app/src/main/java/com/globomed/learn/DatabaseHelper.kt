@@ -14,10 +14,11 @@ class DatabaseHelper(
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        db?.execSQL(GloboMedDBContract.SQL_CREATE_ENTRIES)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        db?.execSQL(GloboMedDBContract.SQL_DROP_TABLE)
+        onCreate(db)
     }
 }
